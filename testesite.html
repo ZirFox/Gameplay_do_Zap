@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Loja de Jogos Call of Duty</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Estilos da Tela de Login */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: #1e3c72;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .login-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #ffe6e6;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Estilos da Loja de Jogos */
+        #game-store {
+            display: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Seção Plutonium & GameRanger */
+        .tools-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .tools-section h2 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .tool-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .tool-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .tool-icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            color: white;
+        }
+
+        .game-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .game-specs {
+            font-size: 0.9em;
+            opacity: 0.9;
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .game-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1200px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .login-header h1 {
+                font-size: 2em;
+            }
+
+            .tools-section h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="login-screen">
+        <div class="login-container">
+            <div class="login-icon">🔫</div>
+            <div class="login-header">
+                <h1>Área Restrita</h1>
+                <p>Coloque A Senha Soldado 🪖</p>
+            </div>
+            <form id="login-form" onsubmit="return checkPassword(event)">
+                <div class="input-group">
+                    <label for="password">Senha de Acesso</label>
+                    <input type="password" id="password" name="password" placeholder="Digite a senha" required>
+                </div>
+                <button type="submit" class="login-btn">🎮 Acessar arsenal</button>
+                <div id="error-message" class="error-message">
+                    ❌ ACESSO NEGADO! Senha incorreta.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loja de Jogos -->
+    <div id="game-store">
+        <div class="container">
+            <header>
+                <h1>🎮 Links Para Jogatina</h1>
+                <p>Grupo sobre Call of Duty PC!</p>
+            </header>
+
+            <!-- Seção Plutonium & GameRanger -->
+            <div class="tools-section">
+                <h2>🛠️ Plutonium & GameRanger</h2>
+                <div class="tools-grid">
+                    <a href="https://cdn.plutonium.pw/updater/plutonium.exe" class="tool-btn" download>
+                        <span class="tool-icon">🚀</span>
+                        Download Plutonium
+                    </a>
+                    <a href="https://www.gameranger.com/download/" class="tool-btn" target="_blank">
+                        <span class="tool-icon">🌐</span>
+                        Download GameRanger
+                    </a>
+                </div>
+            </div>
+
+            <div class="games-grid">
+                <!-- Jogo 1 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty 1</div>
+                        <span class="game-specs">🖥️ PC Super Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://de.dvotx.org/dump/cod1/Call%20of%20Duty%20-%20R.zip" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 2 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty 2</div>
+                        <span class="game-specs">🖥️ PC Super Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://drive.google.com/file/d/1_xzp0KWv4bc-wWe03XO4in8fOK0m9Md1/view?usp=drive_link" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 3 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty 4: Modern Warfare</div>
+                        <span class="game-specs">🖥️ PC Super Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://drive.google.com/file/d/1gac7_Q7N9osF0uAT3vsm2toxrlxia2WN/view?usp=drive_link" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 4 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty: World at War</div>
+                        <span class="game-specs">💻 PC Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://drive.google.com/file/d/15V2F2eVQlAmZPuC1dUYi71uRMOwpI13D/view?usp=drive_link" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 5 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty: Black Ops II</div>
+                        <span class="game-specs">⚙️ PC Médio</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://web.archive.org/web/20220603191144if_/https://plutonium.pw/pluto_t6_full_game.torrent" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download Torrent
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 6 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Medalha de Honra</div>
+                        <span class="game-specs">🖥️ PC Super Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://drive.google.com/file/d/11wEu5kP1BrQBFW5aduhzzqIMdSgoJdZV/view?usp=drive_link" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 7 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Juarez: Bound in Blood</div>
+                        <span class="game-specs">🖥️ PC Super Leve</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://drive.google.com/file/d/1_7Vy4Se1I-5ljSV-OZGQBq_r0Qxim92G/view?usp=drive_link" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Jogo 8 -->
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Call of Duty: Modern Warfare 3</div>
+                        <span class="game-specs">⚙️ PC Médio</span>
+                    </div>
+                    <div class="game-body">
+                        <a href="https://torgamez.com/torrents/t47/Call_of_Duty_Modern_Warfare_3.torrent" class="download-btn" target="_blank">
+                            <span class="icon">⬇️</span> Download Torrent
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <p>🎯 Os links dos jogos serão anexados aqui com o tempo, aguardem!</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword(event) {
+            event.preventDefault();
+            
+            const passwordInput = document.getElementById('password').value;
+            const correctPassword = 'callofpc12345';
+            const errorMessage = document.getElementById('error-message');
+            const loginScreen = document.getElementById('login-screen');
+            const gameStore = document.getElementById('game-store');
+            
+            if (passwordInput === correctPassword) {
+                // Senha correta - mostra a loja
+                loginScreen.style.display = 'none';
+                gameStore.style.display = 'block';
+                errorMessage.classList.remove('show');
+            } else {
+                // Senha incorreta - mostra mensagem de erro
+                errorMessage.classList.add('show');
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html>
